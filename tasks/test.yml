@@ -1,0 +1,8 @@
+- hosts: localhost
+  connection: local
+- hosts: master:compute:infra
+  tasks:
+    - debug: msg={{ hostvars[groups['dns'][0]]['ansible_host'] }}
+    - debug: msg={{ hostvars['localhost']['ansible_default_ipv4']['address'] }}
+    - debug: msg={{ groups['server'] }}
+    - debug: msg={{ hostvars[groups['server'][0]]['ansible_default_ipv4']['address'] }}

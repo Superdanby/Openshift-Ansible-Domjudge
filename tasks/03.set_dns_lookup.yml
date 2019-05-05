@@ -1,0 +1,20 @@
+- hosts: dns:master:infra:compute
+  tasks:
+    - name: Get active connection name
+      shell: nmcli -t connection show --active | grep '\:.*ethernet\|\:.*wifi' | head -n 1 | cut -d ':' -f 2
+      register: result
+    - debug: msg={{ result }}
+
+    - name: Modify DNS from nmcli
+      become: yes
+      command: nmcli connection modify "{{ item[0] }}" ipv4.dns "{{ item[1] }}"
+      with_nested:
+        - "{{ result.stdout }}"
+        - "{{ hostvars[groups['dns'][0]]['ansible_host'] }}"
+    
+    - name: Restart NetworkManager
+      become: yes
+      service:
+        name: NetworkManager
+        state: restarted
+        enabled: yes

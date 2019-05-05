@@ -1,0 +1,10 @@
+- hosts: master:compute:infra
+  tasks:
+    - name: Set hostname
+      become: yes
+      command: hostnamectl set-hostname "{{ inventory_hostname }}"
+
+    - name: Check hostnamectl
+      command: hostnamectl
+      register: result
+    - debug: var=result.stdout_lines

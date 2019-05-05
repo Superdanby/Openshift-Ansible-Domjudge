@@ -1,0 +1,27 @@
+- hosts: dns
+  tasks:
+    - name: Copy dnsmasq.conf
+      become: yes
+      copy:
+        src: dnsmasq.conf
+        dest: /etc/dnsmasq.conf
+
+    - name: Copy hosts_domjudge
+      become: yes
+      copy:
+        src: hosts_domjudge
+        dest: /etc/hosts_domjudge
+
+    - name: Restart dnsmasq
+      become: yes
+      service:
+        name: dnsmasq
+        state: restarted
+        enabled: yes
+
+    - name: Enable dns in firewalld
+      become: yes
+      firewalld:
+        service: dns
+        permanent: yes
+        state: enabled

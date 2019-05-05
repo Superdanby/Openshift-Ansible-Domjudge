@@ -1,0 +1,6 @@
+- hosts: dns:master:infra:compute
+  tasks:
+    - name: Reboot all machines
+      become: yes
+      reboot:
+

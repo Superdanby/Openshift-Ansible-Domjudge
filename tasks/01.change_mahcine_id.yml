@@ -1,0 +1,17 @@
+- hosts: master:compute:infra
+  tasks:
+    - name: Delete machine id
+      become: yes
+      file:
+        state: absent
+        path: /etc/machine-id
+
+    - name: Initialize machine id
+      become: yes
+      command: systemd-machine-id-setup
+
+    - name: Check with hostnamectl
+      command: hostnamectl
+      register: result
+    - debug:
+        var: result

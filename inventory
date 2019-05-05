@@ -1,0 +1,20 @@
+[all:vars]
+ansible_user='yee'
+#ansible_become='yes'
+ansible_become_pass='{{ pass }}'
+ansible_become_method='sudo'
+ansible_python_interpreter='/usr/bin/python3'
+
+[dns]
+infra01.domjudge ansible_host=192.168.218.1
+
+[master]
+master02.domjudge ansible_host=192.168.218.2
+
+[infra]
+infra01.domjudge ansible_host=192.168.218.1
+
+[compute]
+compute03.domjudge ansible_host=192.168.218.3
+compute04.domjudge ansible_host=192.168.218.4
+compute05.domjudge ansible_host=192.168.218.5

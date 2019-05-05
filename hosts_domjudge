@@ -1,4 +1,0 @@
-# /etc/hosts_domjudge
-192.168.218.154 02 master_02.domjudge
-192.168.218.158 01 database_01.domjudge
-192.168.218.159 05 judge_05.domjudge
