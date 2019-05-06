@@ -2,5 +2,5 @@
 192.168.218.1 01 infra01.domjudge
 192.168.218.2 02 master02.domjudge
 192.168.218.3 03 compute03.domjudge
-192.168.218.3 04 compute04.domjudge
-192.168.218.3 05 compute05.domjudge
+192.168.218.4 04 compute04.domjudge
+192.168.218.5 05 compute05.domjudge
