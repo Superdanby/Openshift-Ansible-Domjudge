@@ -41,6 +41,7 @@ Set DNS record for hosts in `openshift-ansible-domjudge/tasks/files/hosts_domjud
 2. Go to `openshift-ansible`
 3. `git checkout release-3.11`
 4. Copy `Openshift-Ansible-Domjudge/openshift_install_config/hosts.domjudge` and place it in `openshift-ansible/inventory`
+5. Add, modify, or remove the files under `Openshift-Ansible-Domjudge/openshift_domjudge_config`
 
 ## Installation
 
@@ -52,12 +53,12 @@ Set DNS record for hosts in `openshift-ansible-domjudge/tasks/files/hosts_domjud
 ### Environment Setup with Ansible
 
 1. Go to `Openshift-Ansible-Domjudge`
-2. Ensure machine ID is different on all hosts with `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/01.change_mahcine_id.yml`
-3. Setup DNS with `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/02.setup_dns.yml`
-4. Set DNS IP for all hosts with: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/03.set_dns_lookup.yml`
-5. Set hostname for all hosts according to DNS records with `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/04.set_hostname.yml`
-6. Upgrade all hosts with `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/05.upgrade_all_packages.yml`
-7. Stop `dnsmasq` on master node with `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/06.stop_dns.yml`
+2. Ensure machine ID is different on all hosts: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/01.change_mahcine_id.yml`
+3. Setup DNS: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/02.setup_dns.yml`
+4. Set DNS IP for all hosts: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/03.set_dns_lookup.yml`
+5. Set hostname for all hosts according to DNS records: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/04.set_hostname.yml`
+6. Upgrade all hosts: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/05.upgrade_all_packages.yml`
+7. Stop `dnsmasq` on master node: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/06.stop_dns.yml`
     - **This step is intended to make sure no process is occupying port 53 on master node.**
 
 ### Install Openshift
@@ -66,6 +67,82 @@ Set DNS record for hosts in `openshift-ansible-domjudge/tasks/files/hosts_domjud
 2. Execute `ansible-playbook -i inventory/hosts.domjudge playbooks/prerequisites.yml`
 3. Execute `ansible-playbook -i inventory/hosts.domjudge playbooks/deploy_cluster.yml`
 
+### Install Database
+
+On domjudge database host:
+
+1. Install `docker` and `docker-compose`. E.g. `sudo dnf install docker`
+2. Start and enable Docker daemon. E.g. `sudo systemctl start docker && sudo systemctl enable docker`
+3. Create `database.yml` with the following content:
+```yaml
+version: "3.3"
+
+services:
+        mariadb:
+                image: mariadb
+                volumes:
+                        - [path to desired mount point]:/var/lib/mysql:Z
+                environment:
+                        - MYSQL_ROOT_PASSWORD=domjudge
+                        - MYSQL_DATABASE=domjudge
+                        - MYSQL_USER=domjudge
+                        - MYSQL_PASSWORD=domjudge
+                ports:
+                        - 3306:3306
+                command:
+                        --max-connections=1000
+```
+4. `sudo docker-compose -f database.yml up -d`
+    - Stop database: `sudo docker-compose -f database.yml down`
+
+### Install Server
+
+On domjudge server host:
+
+1. Install `docker` and `docker-compose`. E.g. `sudo dnf install docker`
+2. Start and enable Docker daemon. E.g. `sudo systemctl start docker && sudo systemctl enable docker`
+3. Create `server.yml` with the following content:
+```yaml
+version: "3.3"
+
+services:
+        domserver:
+                image: domjudge/domserver:latest
+                volumes:
+                        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+                restart: on-failure
+                environment:
+                        - CONTAINER_TIMEZONE=Asia/Taipei
+                        - MYSQL_HOST=[IP/FQDN of domjudge database host]
+                        - MYSQL_ROOT_PASSWORD=domjudge
+                        - MYSQL_DATABASE=domjudge
+                        - MYSQL_USER=domjudge
+                        - MYSQL_PASSWORD=domjudge
+                ports:
+                      - 22222:80
+```
+4. `sudo docker-compose -f server.yml up -d`
+    - Stop database: `sudo docker-compose -f server.yml down`
+5. Login to server on `[domjudge server host]:22222` to setup judgehost password
+
+## Configure and Using Openshift
+
+On openshift master node:
+
+1. Create a user: `sudo htpasswd /etc/origin/master/htpasswd [username]`
+2. Give the user super powers: `sudo oc adm policy add-cluster-role-to-user cluster-admin [username] --rolebinding-name=cluster-admins`
+3. Login to master node web console from `[master FQDN/IP]:8443`
+4. Select `Cluster Console` on the upper left screen and login with the same credentials
+5. In `Administration > Projects`, create a new project with `domjudge` as its name
+6. Under the `domjudge` project:
+    1. In `Administration > Service Account`, modify the name line to `name: privrun` and click `Create`
+    2. Back in terminal, give `privrun` super powers: `sudo oc adm policy add-scc-to-user privileged -z privrun -n domjudge`
+    3. In `Builds > Image Streams`, create Image Streams with the files of `openshift_domjudge_config/image_stream`
+    4. In `Builds > Build Configs`, create Build Configs with the files of `openshift_domjudge_config/build_config`
+    5. In `Workloads > Deployment Configs`, create Deployment Configs with the files in `openshift_domjudge_config/deploy_config`
+7. Select `Application Console` on the upper left screen, and selecr `domjudge` project
+8. Adjust the pods to suit your needs by selecting the pod entries and click the up and down arrow on the right hand side
+
 ## Todo
 
-Better documentation for configuring, deploying and DEBUGGING
+Better DEBUGGING
