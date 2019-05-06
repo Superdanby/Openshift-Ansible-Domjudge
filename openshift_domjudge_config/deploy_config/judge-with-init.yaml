@@ -1,0 +1,100 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: judge
+  namespace: domjudge
+spec:
+  selector:
+    app: judge
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: judge
+    spec:
+      containers:
+        - env:
+          - name: CONTAINER_TIMEZONE
+            value: Asia/Taipei
+          - name: DAEMON_ID
+            value: '0'
+          - name: DOMSERVER_BASEURL
+            value: http://localhost/
+          - name: JUDGEDAEMON_PASSWORD
+            value: local
+          - name: JUDGEDAEMON_USERNAME
+            value: judgehost
+          image: ' '
+          name: judge-0
+          resources:
+              requests:
+                  cpu: 1
+                  memory: 1792Mi
+              limits:
+                  cpu: 1
+                  memory: 1792Mi
+          securityContext:
+            privileged: true
+        - env:
+          - name: CONTAINER_TIMEZONE
+            value: Asia/Taipei
+          - name: DAEMON_ID
+            value: '1'
+          - name: DOMSERVER_BASEURL
+            value: http://localhost/
+          - name: JUDGEDAEMON_PASSWORD
+            value: local
+          - name: JUDGEDAEMON_USERNAME
+            value: judgehost
+          image: ' '
+          name: judge-1
+          resources:
+              requests:
+                  cpu: 1
+                  memory: 1792Mi
+              limits:
+                  cpu: 1
+                  memory: 1792Mi
+          securityContext:
+            privileged: true
+        - env:
+          - name: CONTAINER_TIMEZONE
+            value: Asia/Taipei
+          - name: DAEMON_ID
+            value: '2'
+          - name: DOMSERVER_BASEURL
+            value: http://localhost/
+          - name: JUDGEDAEMON_PASSWORD
+            value: local
+          - name: JUDGEDAEMON_USERNAME
+            value: judgehost
+          image: ' '
+          name: judge-2
+          resources:
+              requests:
+                  cpu: 1
+                  memory: 1792Mi
+              limits:
+                  cpu: 1
+                  memory: 1792Mi
+          securityContext:
+            privileged: true
+      restartPolicy: Always
+      serviceAccountName: privrun
+      serviceAccount: privrun
+  test: false
+  triggers:
+    - type: "ConfigChange"
+    - type: "ImageChange"
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - judge
+        from:
+          kind: "ImageStreamTag"
+          name: "judge-with-init:7.0.0"
+  strategy:
+    type: "Recreate"
+  paused: false
+  revisionHistoryLimit: 2
+  minReadySeconds: 0

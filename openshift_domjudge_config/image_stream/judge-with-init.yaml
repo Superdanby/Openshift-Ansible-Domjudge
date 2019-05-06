@@ -1,0 +1,45 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: judge-with-init
+  namespace: domjudge
+  annotations:
+    openshift.io/display-name: Judge-with-Init
+spec:
+  tags:
+    - name: '6.0.3'
+      annotations:
+        openshift.io/display-name: Judge-with-Init 6.0.3
+        description: >-
+          To run a single judgehost, run the following command: docker run -it
+          --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name judgehost-0 --link
+          domserver:domserver --hostname judgedaemon-0 -e DAEMON_ID=0
+          domjudge/judgehost:6.0.3
+          Dummy init included!
+        sampleRepo: 'https://github.com/DOMjudge/domjudge-packaging.git'
+        tags: judgehost, init
+        version: '6.0.3'
+    - name: '7.0.0'
+      annotations:
+        openshift.io/display-name: Judge-with-Init 7.0.0
+        description: >-
+          To run a single judgehost, run the following command: docker run -it
+          --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name judgehost-0 --link
+          domserver:domserver --hostname judgedaemon-0 -e DAEMON_ID=0
+          domjudge/judgehost:7.0.0
+          Dummy init included!
+        sampleRepo: 'https://github.com/DOMjudge/domjudge-packaging.git'
+        tags: judgehost, init
+        version: '7.0.0'
+    - name: 'latest'
+      annotations:
+        openshift.io/display-name: Judge-with-Init latest
+        description: >-
+          To run a single judgehost, run the following command: docker run -it
+          --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name judgehost-0 --link
+          domserver:domserver --hostname judgedaemon-0 -e DAEMON_ID=0
+          domjudge/judgehost:latest
+          Dummy init included!
+        sampleRepo: 'https://github.com/DOMjudge/domjudge-packaging.git'
+        tags: judgehost, init
+        version: 'latest'

@@ -1,0 +1,53 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: judgehost
+  namespace: domjudge
+  annotations:
+    openshift.io/display-name: Judgehost
+spec:
+  tags:
+    - name: '6.0.3'
+      annotations:
+        openshift.io/display-name: Judgehost 6.0.3
+        description: >-
+          To run a single judgehost, run the following command: docker run -it
+          --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name judgehost-0 --link
+          domserver:domserver --hostname judgedaemon-0 -e DAEMON_ID=0
+          domjudge/judgehost:6.0.3
+        sampleRepo: 'https://github.com/DOMjudge/domjudge-packaging.git'
+        tags: 'judgehost'
+        version: '6.0.3'
+      from:
+        kind: DockerImage
+        name: 'domjudge/judgehost:6.0.3'
+    - name: '7.0.0'
+      annotations:
+        openshift.io/display-name: Judgehost 7.0.0
+        description: >-
+          To run a single judgehost, run the following command: docker run -it
+          --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name judgehost-0 --link
+          domserver:domserver --hostname judgedaemon-0 -e DAEMON_ID=0
+          domjudge/judgehost:7.0.0
+        sampleRepo: 'https://github.com/DOMjudge/domjudge-packaging.git'
+        tags: 'judgehost'
+        version: '7.0.0'
+      from:
+        kind: DockerImage
+        name: 'domjudge/judgehost:7.0.0'
+    - name: 'latest'
+      annotations:
+        openshift.io/display-name: Judgehost latest
+        description: >-
+          To run a single judgehost, run the following command: docker run -it
+          --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name judgehost-0 --link
+          domserver:domserver --hostname judgedaemon-0 -e DAEMON_ID=0
+          domjudge/judgehost:latest
+        sampleRepo: 'https://github.com/DOMjudge/domjudge-packaging.git'
+        tags: 'judgehost'
+        version: 'latest'
+      from:
+        kind: DockerImage
+        name: 'domjudge/judgehost:latest'
+      importPolicy:
+        scheduled: true

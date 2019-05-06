@@ -6,8 +6,8 @@ metadata:
 spec:
   output:
     to:
-      kind: ImageStreamTag
-      name: "judge-with-init:7.0.0"
+      kind: ImageStream
+      name: "judge-with-init"
   source:
     dockerfile: |-
       FROM domjudge/judgehost:yee
@@ -18,8 +18,9 @@ spec:
   strategy:
     dockerStrategy:
       from:
-        kind: "ImageStreamTag"
-        name: "judgehost:7.0.0"
+        kind: "ImageStream"
+        name: "judgehost"
   triggers:
+    - type: "ConfigChange"
     - type: ImageChange
       imageChange: {}
