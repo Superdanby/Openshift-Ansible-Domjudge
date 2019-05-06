@@ -125,7 +125,7 @@ services:
     - Stop database: `sudo docker-compose -f server.yml down`
 5. Login to server on `[domjudge server host]:22222` to setup judgehost password
 
-## Configure and Using Openshift
+## Configuring and Using Openshift
 
 On openshift master node:
 
