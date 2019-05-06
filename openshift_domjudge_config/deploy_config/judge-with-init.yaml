@@ -1,7 +1,7 @@
 apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
-  name: judge
+  name: judge-with-init
   namespace: domjudge
 spec:
   selector:
