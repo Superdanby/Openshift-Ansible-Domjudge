@@ -145,4 +145,4 @@ On openshift master node:
 
 ## Todo
 
-Better DEBUGGING
+Better documentation for DEBUGGING
