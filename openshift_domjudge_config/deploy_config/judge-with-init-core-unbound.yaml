@@ -48,7 +48,7 @@ spec:
           - judge
         from:
           kind: "ImageStreamTag"
-          name: "judge-with-init:7.0.0"
+          name: "judge-with-init-core-unbound:latest"
   strategy:
     type: "Recreate"
   paused: false
