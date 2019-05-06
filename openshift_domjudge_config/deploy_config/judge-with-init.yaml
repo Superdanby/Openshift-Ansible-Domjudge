@@ -6,7 +6,7 @@ metadata:
 spec:
   selector:
     app: judge
-  replicas: 5
+  replicas: 0
   template:
     metadata:
       labels:
@@ -89,7 +89,9 @@ spec:
       imageChangeParams:
         automatic: true
         containerNames:
-          - judge
+          - judge-0
+          - judge-1
+          - judge-2
         from:
           kind: "ImageStreamTag"
           name: "judge-with-init:latest"
