@@ -1,0 +1,27 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: judge-with-init-core-unbound-7.0.0
+  namespace: domjudge
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: "judge-with-init-core-unbound:7.0.0"
+  source:
+    dockerfile: |-
+      FROM domjudge/judgehost:yee
+      RUN apt update
+      RUN apt install dumb-init
+      RUN sed -i 's/CPUSET_OPT="-P $CPUSET"//g' /opt/domjudge/judgehost/lib/judge/testcase_run.sh
+      ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+      CMD ["/scripts/start.sh"]
+  strategy:
+    dockerStrategy:
+      from:
+        kind: "ImageStreamTag"
+        name: "judgehost:7.0.0"
+  triggers:
+    - type: "ConfigChange"
+    - type: ImageChange
+      imageChange: {}
