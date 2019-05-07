@@ -4,7 +4,7 @@ Setup [Domjudge](https://github.com/DOMjudge/domjudge-packaging) with Openshift(
 
 ## Hardware Configuration
 
-Having at least 5 hosts: 1 domjudge server, 1 domjudge database, 1 openshift master node, 1 openshift infra node with DNS, and multiple openshift compute nodes for judges. Use 1 of the computers listed above or any other computer that is connected to all hosts as the main system. The main system will be controlling all the hosts and setup their environment.
+Having at least 5 hosts: 1 openshift master node, 1 openshift infra node with DNS, and 3 or more openshift compute nodes for judges. Use 1 of the computers listed above or any other computer that is connected to all hosts as the main system. The main system will be controlling all the hosts and setup their environment.
 
 ## Prerequisites
 
@@ -41,7 +41,16 @@ Set DNS record for hosts in `openshift-ansible-domjudge/tasks/files/hosts_domjud
 2. Go to `openshift-ansible`
 3. `git checkout release-3.11`
 4. Copy `Openshift-Ansible-Domjudge/openshift_install_config/hosts.domjudge` and place it in `openshift-ansible/inventory`
-5. Add, modify, or remove the files under `Openshift-Ansible-Domjudge/openshift_domjudge_config`
+
+### Domjudge Configs for Openshift
+
+- `deploy_config`:
+    - `domserver`: set `nodeName` to the FQDN of 1 of the compute nodes, set the mariadb credentials
+    - `mariadb`: set `nodeName` to the FQDN of 1 of the compute nodes, set the mariadb credentials, set persistent volume
+    - `judge-with-init`: set `JUDGEDAEMON_PASSWORD`, set `memory`
+    - `judge-with-init-core-unbound`: set `JUDGEDAEMON_PASSWORD`, set `memory`
+- `services`:
+    - **set `externalIPs` to access your domjudge server**.
 
 ## Installation
 
@@ -67,64 +76,6 @@ Set DNS record for hosts in `openshift-ansible-domjudge/tasks/files/hosts_domjud
 2. Execute `ansible-playbook -i inventory/hosts.domjudge playbooks/prerequisites.yml`
 3. Execute `ansible-playbook -i inventory/hosts.domjudge playbooks/deploy_cluster.yml`
 
-### Install Database
-
-On domjudge database host:
-
-1. Install `docker` and `docker-compose`. E.g. `sudo dnf install docker`
-2. Start and enable Docker daemon. E.g. `sudo systemctl start docker && sudo systemctl enable docker`
-3. Create `database.yml` with the following content:
-```yaml
-version: "3.3"
-
-services:
-        mariadb:
-                image: mariadb
-                volumes:
-                        - [path to desired mount point]:/var/lib/mysql:Z
-                environment:
-                        - MYSQL_ROOT_PASSWORD=domjudge
-                        - MYSQL_DATABASE=domjudge
-                        - MYSQL_USER=domjudge
-                        - MYSQL_PASSWORD=domjudge
-                ports:
-                        - 3306:3306
-                command:
-                        --max-connections=1000
-```
-4. `sudo docker-compose -f database.yml up -d`
-    - Stop database: `sudo docker-compose -f database.yml down`
-
-### Install Server
-
-On domjudge server host:
-
-1. Install `docker` and `docker-compose`. E.g. `sudo dnf install docker`
-2. Start and enable Docker daemon. E.g. `sudo systemctl start docker && sudo systemctl enable docker`
-3. Create `server.yml` with the following content:
-```yaml
-version: "3.3"
-
-services:
-        domserver:
-                image: domjudge/domserver:latest
-                volumes:
-                        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-                restart: on-failure
-                environment:
-                        - CONTAINER_TIMEZONE=Asia/Taipei
-                        - MYSQL_HOST=[IP/FQDN of domjudge database host]
-                        - MYSQL_ROOT_PASSWORD=domjudge
-                        - MYSQL_DATABASE=domjudge
-                        - MYSQL_USER=domjudge
-                        - MYSQL_PASSWORD=domjudge
-                ports:
-                      - 22222:80
-```
-4. `sudo docker-compose -f server.yml up -d`
-    - Stop database: `sudo docker-compose -f server.yml down`
-5. Login to server on `[domjudge server host]:22222` to setup judgehost password
-
 ## Configuring and Using Openshift
 
 On openshift master node:
@@ -140,8 +91,15 @@ On openshift master node:
     3. In `Builds > Image Streams`, create Image Streams with the files of `openshift_domjudge_config/image_stream`
     4. In `Builds > Build Configs`, create Build Configs with the files of `openshift_domjudge_config/build_config`
     5. In `Workloads > Deployment Configs`, create Deployment Configs with the files in `openshift_domjudge_config/deploy_config`
+    6. In `Networking > Services`, create Services with the files in `openshift_domjudge_config/services`
 7. Select `Application Console` on the upper left screen, and selecr `domjudge` project
 8. Adjust the pods to suit your needs by selecting the pod entries and click the up and down arrow on the right hand side
+
+## Domjudge Setup
+
+1. Login from the external IP(s) set in `Openshift-Ansible-Domjudge/openshift_domjudge_config/services/domserver.yaml` to setup judgehost password
+
+2. Well done! All components should be running now.
 
 ## Todo
 

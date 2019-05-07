@@ -6,7 +6,7 @@ metadata:
 spec:
   selector:
     app: judge
-  replicas: 0
+  replicas: 1
   template:
     metadata:
       labels:
@@ -19,9 +19,9 @@ spec:
           - name: DAEMON_ID
             value: '0'
           - name: DOMSERVER_BASEURL
-            value: http://localhost/
+            value: http://172.30.222.22:22222/
           - name: JUDGEDAEMON_PASSWORD
-            value: local
+            value: [desired password for judges]
           - name: JUDGEDAEMON_USERNAME
             value: judgehost
           image: ' '
@@ -29,10 +29,10 @@ spec:
           resources:
               requests:
                   cpu: 1
-                  memory: 1792Mi
+                  memory: [desired memory space, e.g. 2048Mi]
               limits:
                   cpu: 1
-                  memory: 1792Mi
+                  memory: [memory limit, e.g. 2048Mi]
           securityContext:
             privileged: true
         - env:
@@ -41,9 +41,9 @@ spec:
           - name: DAEMON_ID
             value: '1'
           - name: DOMSERVER_BASEURL
-            value: http://localhost/
+            value: http://172.30.222.22:22222/
           - name: JUDGEDAEMON_PASSWORD
-            value: local
+            value: [desired password for judges]
           - name: JUDGEDAEMON_USERNAME
             value: judgehost
           image: ' '
@@ -51,10 +51,10 @@ spec:
           resources:
               requests:
                   cpu: 1
-                  memory: 1792Mi
+                  memory: [desired memory space, e.g. 2048Mi]
               limits:
                   cpu: 1
-                  memory: 1792Mi
+                  memory: [memory limit, e.g. 2048Mi]
           securityContext:
             privileged: true
         - env:
@@ -63,9 +63,9 @@ spec:
           - name: DAEMON_ID
             value: '2'
           - name: DOMSERVER_BASEURL
-            value: http://localhost/
+            value: http://172.30.222.22:22222/
           - name: JUDGEDAEMON_PASSWORD
-            value: local
+            value: [desired password for judges]
           - name: JUDGEDAEMON_USERNAME
             value: judgehost
           image: ' '
@@ -73,10 +73,10 @@ spec:
           resources:
               requests:
                   cpu: 1
-                  memory: 1792Mi
+                  memory: [desired memory space, e.g. 2048Mi]
               limits:
                   cpu: 1
-                  memory: 1792Mi
+                  memory: [memory limit, e.g. 2048Mi]
           securityContext:
             privileged: true
       restartPolicy: Always

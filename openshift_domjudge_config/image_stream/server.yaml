@@ -1,0 +1,44 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: domserver
+  namespace: domjudge
+  annotations:
+    openshift.io/display-name: Domserver
+spec:
+  tags:
+    - name: '6.0.3'
+      annotations:
+        openshift.io/display-name: Domserver 6.0.3
+        description: >-
+          docker run -v /sys/fs/cgroup:/sys/fs/cgroup:ro --link dj-mariadb:mariadb -it -e MYSQL_HOST=mariadb -e MYSQL_USER=domjudge -e MYSQL_DATABASE=domjudge -e MYSQL_PASSWORD=djpw -e MYSQL_ROOT_PASSWORD=rootpw -p 12345:80 --name domserver domjudge/domserver:latest
+        sampleRepo: 'https://github.com/DOMjudge/domjudge-packaging.git'
+        tags: 'domserver'
+        version: '6.0.3'
+      from:
+        kind: DockerImage
+        name: 'domjudge/domserver:6.0.3'
+    - name: '7.0.0'
+      annotations:
+        openshift.io/display-name: Domserver 7.0.0
+        description: >-
+          docker run -v /sys/fs/cgroup:/sys/fs/cgroup:ro --link dj-mariadb:mariadb -it -e MYSQL_HOST=mariadb -e MYSQL_USER=domjudge -e MYSQL_DATABASE=domjudge -e MYSQL_PASSWORD=djpw -e MYSQL_ROOT_PASSWORD=rootpw -p 12345:80 --name domserver domjudge/domserver:latest
+        sampleRepo: 'https://github.com/DOMjudge/domjudge-packaging.git'
+        tags: 'domserver'
+        version: '7.0.0'
+      from:
+        kind: DockerImage
+        name: 'domjudge/domserver:7.0.0'
+    - name: 'latest'
+      annotations:
+        openshift.io/display-name: Domserver latest
+        description: >-
+          docker run -v /sys/fs/cgroup:/sys/fs/cgroup:ro --link dj-mariadb:mariadb -it -e MYSQL_HOST=mariadb -e MYSQL_USER=domjudge -e MYSQL_DATABASE=domjudge -e MYSQL_PASSWORD=djpw -e MYSQL_ROOT_PASSWORD=rootpw -p 12345:80 --name domserver domjudge/domserver:latest
+        sampleRepo: 'https://github.com/DOMjudge/domjudge-packaging.git'
+        tags: 'domserver'
+        version: 'latest'
+      from:
+        kind: DockerImage
+        name: 'domjudge/domserver:latest'
+      importPolicy:
+        scheduled: true

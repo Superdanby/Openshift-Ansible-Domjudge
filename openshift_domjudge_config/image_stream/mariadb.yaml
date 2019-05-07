@@ -1,0 +1,20 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: mariadb
+  namespace: domjudge
+  annotations:
+    openshift.io/display-name: Maria Database
+spec:
+  tags:
+    - name: 'latest'
+      annotations:
+        openshift.io/display-name: Maria Database latest
+        description: >-
+          docker run -it --name dj-mariadb -e MYSQL_ROOT_PASSWORD=rootpw -e MYSQL_USER=domjudge -e MYSQL_PASSWORD=djpw -e MYSQL_DATABASE=domjudge -p 13306:3306 mariadb --max-connections=1000
+        sampleRepo: 'https://github.com/DOMjudge/domjudge-packaging.git'
+        tags: 'mariadb'
+        version: 'latest'
+      from:
+        kind: DockerImage
+        name: 'mariadb:latest'

@@ -1,0 +1,18 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: domserver
+  namespace: domjudge
+spec:
+  selector:
+    app: domserver
+  ports:
+    - name: '22222'
+      protocol: TCP
+      port: 22222
+      targetPort: 80
+  clusterIP: 172.30.222.22
+  type: ClusterIP
+  externalIPs:
+    - [Desired IP e.g. 192.168.0.1]
+    - [More IPs e.g. 140.123.1.1]
