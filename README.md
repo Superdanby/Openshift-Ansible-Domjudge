@@ -13,7 +13,7 @@ Having at least 5 hosts: 1 domjudge server, 1 domjudge database, 1 openshift mas
 3. [Ansible](https://www.ansible.com/) installed on your main system
 4. SSH server enabled and accepting interactive challenge on all openshift hosts
 5. All hosts connected via internet
-6. All hosts have a user with the same username
+6. All hosts have an user with the same username
 7. `git clone git@github.com:Superdanby/Openshift-Ansible-Domjudge.git`
 8. `git clone https://github.com/openshift/openshift-ansible`
 
@@ -145,4 +145,5 @@ On openshift master node:
 
 ## Todo
 
-Better documentation for DEBUGGING
+1. Merge all openshift_domjudge_config files into [1 template](https://github.com/openshift/origin/tree/master/examples/storage-examples/local-examples)
+2. Better documentation for DEBUGGING
