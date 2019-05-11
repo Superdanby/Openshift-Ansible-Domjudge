@@ -4,5 +4,4 @@
       become: yes
       service:
         name: dnsmasq
-        state: enabled
         enabled: yes
