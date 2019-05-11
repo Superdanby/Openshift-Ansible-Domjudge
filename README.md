@@ -21,7 +21,7 @@ Having at least 5 hosts: 1 openshift master node, 1 openshift infra node with DN
 
 ### DNS
 
-Set DNS record for hosts in `openshift-ansible-domjudge/tasks/files/hosts_domjudge`.
+Set DNS record for hosts in `Openshift-Ansible-Domjudge/tasks/files/hosts_domjudge`.
 
 ### Ansible
 

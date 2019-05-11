@@ -6,16 +6,16 @@
 # should use an external load balancing solution that itself is highly available.
 
 [masters]
-master02.domjudge
+master01.domjudge
 
 [etcd]
-master02.domjudge
+master01.domjudge
 
 [nodes]
 # openshift_node_group_name must be provided for each node
 # See 'Node Group Definition and Mapping' in the project README for more details
-master02.domjudge openshift_node_group_name="node-config-master"
-infra01.domjudge openshift_node_group_name="node-config-infra"
+master01.domjudge openshift_node_group_name="node-config-master"
+infra02.domjudge openshift_node_group_name="node-config-infra"
 compute03.domjudge openshift_node_group_name="node-config-compute"
 compute04.domjudge openshift_node_group_name="node-config-compute"
 compute05.domjudge openshift_node_group_name="node-config-compute"
