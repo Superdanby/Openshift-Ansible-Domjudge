@@ -6,13 +6,13 @@ ansible_become_method='sudo'
 ansible_python_interpreter='/usr/bin/python3'
 
 [dns]
-infra01.domjudge ansible_host=192.168.218.1
+master01.domjudge ansible_host=192.168.218.1
 
 [master]
-master02.domjudge ansible_host=192.168.218.2
+infra02.domjudge ansible_host=192.168.218.2
 
 [infra]
-infra01.domjudge ansible_host=192.168.218.1
+master01.domjudge ansible_host=192.168.218.1
 
 [compute]
 compute03.domjudge ansible_host=192.168.218.3
