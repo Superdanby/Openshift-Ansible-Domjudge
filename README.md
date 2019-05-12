@@ -67,8 +67,12 @@ Set DNS record for hosts in `Openshift-Ansible-Domjudge/tasks/files/hosts_domjud
 4. Set DNS IP for all hosts: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/03.set_dns_lookup.yml`
 5. Set hostname for all hosts according to DNS records: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/04.set_hostname.yml`
 6. Upgrade all hosts: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/05.upgrade_all_packages.yml`
-7. Stop `dnsmasq` on master node: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/06.stop_dns.yml`
-    - **This step is intended to make sure no process is occupying port 53 on master node.**
+7. Enable dnsmasq on master to prevent System Resolv occupying port 53: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/06.enable_dnsmasq.yml`
+8. Reboot all hosts: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/07.reboot.yml`
+    - **If the main system is one of the cluster hosts, remember to exclude it from 07.reboot.yml and reboot it manually after the others finished their reboots.**
+    - Rebooting all hosts ensures `journactl` works normally after a machine id change.
+9. Stop `dnsmasq` on master node: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/08.stop_dns.yml`
+    - **Step 7 ~ 9 is intended to prevent System Resolv occupying port 53 on master node.**
 
 ### Install Openshift
 
@@ -86,12 +90,12 @@ On openshift master node:
 4. Select `Cluster Console` on the upper left screen and login with the same credentials
 5. In `Administration > Projects`, create a new project with `domjudge` as its name
 6. Under the `domjudge` project:
-    1. In `Administration > Service Account`, modify the name line to `name: privrun` and click `Create`
+    1. In `Administration > Service Account`, create a new service account and modify the name line to `name: privrun`
     2. Back in terminal, give `privrun` super powers: `sudo oc adm policy add-scc-to-user privileged -z privrun -n domjudge`
-    3. In `Builds > Image Streams`, create Image Streams with the files of `openshift_domjudge_config/image_stream`
-    4. In `Builds > Build Configs`, create Build Configs with the files of `openshift_domjudge_config/build_config`
+    3. In `Builds > Image Streams`, create Image Streams with the files of `Openshift-Ansible-Domjudge/openshift_domjudge_config/image_stream`
+    4. In `Builds > Build Configs`, create Build Configs with the files of `Openshift-Ansible-Domjudge/openshift_domjudge_config/build_config`
     5. In `Workloads > Deployment Configs`, create Deployment Configs with the files in `openshift_domjudge_config/deploy_config`
-    6. In `Networking > Services`, create Services with the files in `openshift_domjudge_config/services`
+    6. In `Networking > Services`, create Services with the files in `Openshift-Ansible-Domjudge/openshift_domjudge_config/services`
 7. Select `Application Console` on the upper left screen, and selecr `domjudge` project
 8. Adjust the pods to suit your needs by selecting the pod entries and click the up and down arrow on the right hand side
 
