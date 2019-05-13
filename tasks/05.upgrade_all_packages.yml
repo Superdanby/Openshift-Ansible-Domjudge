@@ -2,6 +2,11 @@
   tasks:
     - name: Upgrade all packages
       become: yes
+      retries: 5
+      delay: 5
+      command: dnf upgrade -y
+    - name: Ensure all packages are up to date
+      become: yes
       dnf:
         name: "*"
         state: latest

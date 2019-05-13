@@ -129,6 +129,10 @@ On openshift master node:
 6. `ansible-playbook -i inventory/hosts.domjudge playbooks/openshift-node/scaleup.yml`
 7. `ansible-playbook -i inventory/hosts.domjudge playbooks/openshift-master/scaleup.yml`
 
+## Issues
+
+1. DNF upgrade may take significant amount of time. It may also fail in some cases. I would recommend to give it some time and re-run or even do it manually on failure.
+
 ## Todo
 
 1. Merge all openshift_domjudge_config files into [1 template](https://github.com/openshift/origin/tree/master/examples/storage-examples/local-examples)
