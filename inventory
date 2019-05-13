@@ -18,3 +18,7 @@ master01.domjudge ansible_host=192.168.218.1
 compute03.domjudge ansible_host=192.168.218.3
 compute04.domjudge ansible_host=192.168.218.4
 compute05.domjudge ansible_host=192.168.218.5
+
+[new_nodes]
+
+[new_masters]

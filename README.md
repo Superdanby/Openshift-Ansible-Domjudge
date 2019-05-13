@@ -105,6 +105,28 @@ On openshift master node:
 
 2. Well done! All components should be running now.
 
+## Add Nodes and Masters
+
+### Configuration
+
+1. All hosts meet the [prerequisites](#prerequisites).
+2. Add DNS record for new hosts in `Openshift-Ansible-Domjudge/tasks/files/hosts_domjudge`.
+    ![DNS](https://i.imgur.com/8Kj3rFe.png)
+3. Add hosts ansible setup in `Openshift-Ansible-Domjudge/inventory`.
+    ![Ansible inventory file](![](https://i.imgur.com/gTUyO7m.png))
+4. [Add host mappings](https://docs.okd.io/latest/admin_guide/manage_nodes.html#adding-cluster-hosts_manage-nodes) to Openshift configuration file in `Openshift-Ansible-Domjudge/openshift_install_config/hosts.domjudge`
+    ![Openshift configuration file](https://i.imgur.com/B4b3Wtq.png)
+5. Replace `openshift-ansible/inventory` with `Openshift-Ansible-Domjudge/openshift_install_config/hosts.domjudge`.
+
+### Scale Up
+
+1. Go to `Openshift-Ansible-Domjudge`
+2. Run `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/add_nodes.yml`
+3. Run `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/add_masters.yml`
+4. Go to `openshift-ansible`
+5. `ansible-playbook -i inventory/hosts.domjudge playbooks/scaleup.yml`
+6. `ansible-playbook -i inventory/hosts.domjudge playbooks/openshift-master/scaleup.yml`
+
 ## Todo
 
 1. Merge all openshift_domjudge_config files into [1 template](https://github.com/openshift/origin/tree/master/examples/storage-examples/local-examples)

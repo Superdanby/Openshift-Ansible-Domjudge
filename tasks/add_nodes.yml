@@ -1,0 +1,8 @@
+- hosts: new_nodes
+  tasks:
+    - include: 01.change_mahcine_id.yml
+    - include: 02.setup_dns.yml
+    - include: 03.set_dns_lookup.yml
+    - include: 04.set_hostname.yml
+    - include: 05.upgrade_all_packages.yml
+    - include: 07.reboot.yml

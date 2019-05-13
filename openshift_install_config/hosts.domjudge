@@ -8,6 +8,8 @@
 [masters]
 master01.domjudge
 
+[new_masters]
+
 [etcd]
 master01.domjudge
 
@@ -19,6 +21,8 @@ infra02.domjudge openshift_node_group_name="node-config-infra"
 compute03.domjudge openshift_node_group_name="node-config-compute"
 compute04.domjudge openshift_node_group_name="node-config-compute"
 compute05.domjudge openshift_node_group_name="node-config-compute"
+
+[new_nodes]
 # Node Group settings are in roles/openshift_facts/defaults/main.yml
 
 # Create an OSEv3 group that contains the masters and nodes groups
