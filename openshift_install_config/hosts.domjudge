@@ -30,6 +30,8 @@ compute05.domjudge openshift_node_group_name="node-config-compute"
 masters
 nodes
 etcd
+new_nodes
+new_masters
 
 [OSEv3:vars]
 ansible_python_interpreter=/usr/bin/python3
