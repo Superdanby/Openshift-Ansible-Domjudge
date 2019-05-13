@@ -1,6 +1,5 @@
-- hosts: dns:master:infra:compute
+- hosts: "{{ hosts | default('dns:master:infra:compute') }}"
   tasks:
     - name: Reboot all machines
       become: yes
       reboot:
-

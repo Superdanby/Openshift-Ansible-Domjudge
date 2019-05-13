@@ -1,10 +1,9 @@
 - hosts: new_masters
-  tasks:
-    - include: 01.change_mahcine_id.yml
-    - include: 02.setup_dns.yml
-    - include: 03.set_dns_lookup.yml
-    - include: 04.set_hostname.yml
-    - include: 05.upgrade_all_packages.yml
-    - include: 06.enable_dnsmasq.yml
-    - include: 07.reboot.yml
-    - include: 08.stop_dns.yml
+- import_playbook: 01.change_mahcine_id.yml
+- import_playbook: 02.setup_dns.yml
+- import_playbook: 03.set_dns_lookup.yml
+- import_playbook: 04.set_hostname.yml
+- import_playbook: 05.upgrade_all_packages.yml
+- import_playbook: 06.enable_dnsmasq.yml
+- import_playbook: 07.reboot.yml
+- import_playbook: 08.stop_dns.yml

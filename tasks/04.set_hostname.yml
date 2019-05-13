@@ -1,4 +1,4 @@
-- hosts: master:compute:infra
+- hosts: "{{ hosts | default('master:infra:compute') }}"
   tasks:
     - name: Set hostname
       become: yes

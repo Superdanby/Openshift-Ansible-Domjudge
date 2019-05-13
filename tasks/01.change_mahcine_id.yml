@@ -1,4 +1,4 @@
-- hosts: master:compute:infra
+- hosts: "{{ hosts | default('master:compute:infra') }}"
   tasks:
     - name: Delete machine id
       become: yes

@@ -57,7 +57,7 @@ Set DNS record for hosts in `Openshift-Ansible-Domjudge/tasks/files/hosts_domjud
 ### Enable Ansible Access to All Hosts
 
 1. Go to `Openshift-Ansible-Domjudge`
-2. Execute `send-ssh-keys.sh` with `./send-ssh-keys.sh`
+2. Send ssh public key to all hosts: `./send-ssh-keys.sh`
 
 ### Environment Setup with Ansible
 
@@ -121,11 +121,13 @@ On openshift master node:
 ### Scale Up
 
 1. Go to `Openshift-Ansible-Domjudge`
-2. Run `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/add_nodes.yml`
-3. Run `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/add_masters.yml`
-4. Go to `openshift-ansible`
-5. `ansible-playbook -i inventory/hosts.domjudge playbooks/openshift-node/scaleup.yml`
-6. `ansible-playbook -i inventory/hosts.domjudge playbooks/openshift-master/scaleup.yml`
+2. Send ssh public key to all hosts: `./send-ssh-keys.sh`
+    1. Enter 2 to use the original ssh key pair
+3. Run `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/add_nodes.yml`
+4. Run `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/add_masters.yml`
+5. Go to `openshift-ansible`
+6. `ansible-playbook -i inventory/hosts.domjudge playbooks/openshift-node/scaleup.yml`
+7. `ansible-playbook -i inventory/hosts.domjudge playbooks/openshift-master/scaleup.yml`
 
 ## Todo
 

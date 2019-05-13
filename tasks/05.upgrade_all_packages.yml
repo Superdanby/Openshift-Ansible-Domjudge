@@ -1,4 +1,4 @@
-- hosts: master:compute:infra
+- hosts: "{{ hosts | default('dns:master:infra:compute') }}"
   tasks:
     - name: Upgrade all packages
       become: yes
