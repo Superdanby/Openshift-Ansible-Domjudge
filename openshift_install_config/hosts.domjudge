@@ -13,6 +13,8 @@ master01.domjudge
 [etcd]
 master01.domjudge
 
+[new_masters]
+
 [nodes]
 # openshift_node_group_name must be provided for each node
 # See 'Node Group Definition and Mapping' in the project README for more details
