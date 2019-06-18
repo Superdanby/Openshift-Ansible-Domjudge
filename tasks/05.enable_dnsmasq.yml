@@ -1,4 +1,4 @@
-- hosts: master
+- hosts: "{{ hosts | default('master') }}"
   tasks:
     - name: Stop dnsmasq
       become: yes
