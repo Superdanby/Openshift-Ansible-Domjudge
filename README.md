@@ -64,7 +64,7 @@ Set DNS record for hosts in `tasks/files/hosts_domjudge`.
 5. Upgrade all hosts: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/05.upgrade_all_packages.yml`
 6. Enable dnsmasq on master to prevent System Resolv occupying port 53: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/06.enable_dnsmasq.yml`
 7. Reboot all hosts: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/07.reboot.yml`
-    - **If the main system is one of the cluster hosts, remember to exclude it from 07.reboot.yml and reboot it manually after the others finished their reboots.**
+    - **If the main system is one of the cluster hosts, remember to exclude it from 07.reboot.yml and reboot it manually after the others finished their reboots.** For instance, if the main system is on the DNS machine, change the command to `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' --extra-vars 'hosts=master:compute' tasks/07.reboot.yml`
     - Rebooting all hosts ensures `journactl` works normally after a machine id change.
 8. Stop `dnsmasq` on master node: `ansible-playbook -i inventory --ask-vault-pass --extra-vars '@[path to vault file]' tasks/08.stop_dns.yml`
     - **Step 6 ~ 8 is intended to prevent System Resolv occupying port 53 on master node.**
