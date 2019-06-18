@@ -2,6 +2,10 @@
 
 Setup [Domjudge](https://github.com/DOMjudge/domjudge-packaging) with [Openshift Origin](https://github.com/openshift/origin) 3.11
 
+## Why DOMjudge + Openshift?
+
+See [my blog](https://superdanby.github.io/Blog/setup-a-multi-node-local-openshift-cluster.html) for full explanation.
+
 ## Hardware Configuration
 
 Having at least 5 hosts: 1 openshift master node, 1 openshift infra node with DNS, and 3 or more openshift compute nodes for judges. Use 1 of the computers listed above or any other computer that is connected to all hosts as the main system. The main system will be controlling all the hosts and setup their environment.
