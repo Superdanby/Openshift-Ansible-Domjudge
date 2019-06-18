@@ -13,7 +13,7 @@ master01.domjudge
 [etcd]
 master01.domjudge
 
-[new_masters]
+[new_etcd]
 
 [nodes]
 # openshift_node_group_name must be provided for each node
