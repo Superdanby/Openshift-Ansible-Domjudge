@@ -4,6 +4,8 @@
       become: yes
       retries: 5
       delay: 5
+      register: result
+      until: result is not failed
       command: dnf upgrade -y
     - name: Ensure all packages are up to date
       become: yes
