@@ -18,7 +18,7 @@ Having at least 5 hosts: 1 openshift master node, 1 openshift infra node with DN
 4. SSH server enabled and accepting interactive challenge on all openshift hosts
 5. All hosts connected via internet
 6. All hosts have an user with the same username
-7. `git clone --recurse-submodules -j8 git@github.com:Superdanby/Openshift-Ansible-Domjudge.git`
+7. `git clone --recurse-submodules -j8 https://github.com/Superdanby/Openshift-Ansible-Domjudge.git`
 
 ## Configuration
 
